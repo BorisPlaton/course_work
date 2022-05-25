@@ -4,23 +4,24 @@ import random
 import turtle as t
 from collections import namedtuple
 
-from first_task.config import DefaultConfig
+
+class DefaultConfig:
+    PEN_COLOR = 'red'
+    PEN_FILL_COLOR = 'red'
+    PEN_SIZE = 2
+    SCREEN_WIDTH = 640
+    SCREEN_HEIGHT = 480
+    BACKGROUND_COLOR = 'orange'
+    TURTLE_SPEED = 10
+    HIDE_TURTLE = False
+
+    _config_list = [
+        'PEN_COLOR', 'PEN_FILL_COLOR', 'PEN_SIZE', 'SCREEN_WIDTH', 'SCREEN_HEIGHT',
+        'BACKGROUND_COLOR', 'TURTLE_SPEED', 'HIDE_TURTLE',
+    ]
 
 
-class TurtleConfig:
-    config = {
-        'PEN_COLOR': None,
-        'PEN_FILL_COLOR': None,
-        'PEN_SIZE': None,
-        'SCREEN_WIDTH': None,
-        'SCREEN_HEIGHT': None,
-        'BACKGROUND_COLOR': None,
-    }
-
-    def __new__(cls, *args, **kwargs):
-        obj = object.__new__(cls)
-        obj._set_config_from_class(DefaultConfig)
-        return obj
+class TurtleConfig(DefaultConfig):
 
     def _set_config_from_class(self, config_class):
         data = self._collect_config_data_from_class(config_class)
@@ -29,7 +30,7 @@ class TurtleConfig:
 
     def _collect_config_data_from_class(self, config_class):
         data = {}
-        for attr in self.config:
+        for attr in self._config_list:
             value = getattr(config_class, attr, None)
             if value:
                 data[attr] = value
@@ -42,6 +43,83 @@ class CustomTurtle(TurtleConfig, t.Turtle):
         super(CustomTurtle, self).__init__(*args, **kwargs)
         self.window = t.Screen()
         self._setup_class()
+
+    def draw_amogus(self):
+
+        pen_size = 2
+        pen_color = 'black'
+        fill_color = 'red'
+        self.setheading(90)
+
+        self.pensize(pen_size)
+        self.pencolor(pen_color)
+        self.fillcolor(fill_color)
+
+        right_top_coord, _ = self._draw_amogus_backpack()
+
+        self._draw_amogus_body(right_top_coord)
+        self._draw_amogus_glasses(
+            (right_top_coord[0] + 50, right_top_coord[1])
+        )
+
+        self._setup_class()
+
+    def _draw_amogus_body(self, start_point: tuple):
+        self.move_to(start_point)
+        self.begin_fill()
+        self.down()
+        self.circle(-25, extent=180)
+        self.forward(80)
+        self.circle(-10, extent=180)
+        self.forward(10)
+        self.left(90)
+        self.forward(10)
+        self.left(90)
+        self.forward(10)
+        self.circle(-10, extent=189)
+        self.goto(start_point)
+        self.end_fill()
+
+    def _draw_amogus_glasses(self, start_point: tuple):
+        self.move_to(start_point)
+        self.down()
+        self.setheading(0)
+        self.fillcolor('#aeaff5')
+        self.begin_fill()
+        self.circle(-10, extent=180)
+        self.forward(10)
+        self.circle(-10, extent=180)
+        self.forward(10)
+        self.end_fill()
+
+    def _draw_amogus_backpack(self):
+
+        right_top_angle: tuple
+        left_bottom_angle: tuple
+
+        self.move_to(
+            (int(self.x_coordinates[0] + self.x_coordinates[0] * 0.1), 0)
+        )
+
+        self.begin_fill()
+        self.down()
+        self.setheading(90)
+        self.forward(50)
+        self.circle(-10, extent=90)
+        self.forward(10)
+        right_top_angle = self.pos()
+
+        self.right(90)
+        self.forward(70)
+        left_bottom_angle = self.pos()
+
+        self.right(90)
+        self.forward(10)
+        self.circle(-10, extent=90)
+
+        self.end_fill()
+
+        return right_top_angle, left_bottom_angle
 
     def draw_stars(self, length: int = 25, stars_amount: int = 5):
         """
@@ -67,9 +145,8 @@ class CustomTurtle(TurtleConfig, t.Turtle):
         :param coordinates: Координаты вида (x, y), в которых рисуют звезду.
         """
 
-        self.penup()
-        self.setposition(coordinates)
-        self.pendown()
+        self.move_to(coordinates)
+        self.down()
 
         self.begin_fill()
         for _ in range(5):
@@ -79,6 +156,20 @@ class CustomTurtle(TurtleConfig, t.Turtle):
             self.right(-48)
         self.end_fill()
 
+    def draw_background(self, length: int = 25, squares_amount: int = 25):
+        self.down()
+        self.pencolor(self.get_random_color())
+        for i in range(squares_amount):
+            length += 10
+            self.left(5)
+            for _ in range(4):
+                self.forward(length)
+                self.left(90)
+
+    def move_to(self, coordinates):
+        self.up()
+        self.goto(coordinates)
+
     def get_random_coordinates(self) -> tuple[int, int]:
         """Случайная координата в пределах координатной сетки экрана."""
 
@@ -86,12 +177,20 @@ class CustomTurtle(TurtleConfig, t.Turtle):
         y = random.randint(*self.coordinates.y)
         return x, y
 
+    @staticmethod
+    def get_random_color():
+        hex_chars = [
+            'a', 'b', 'c', 'd', 'e', 'f', '1', '2', '3', '4',
+            '5', '6', '7', '8', '9',
+        ]
+        return '#' + ''.join([random.choice(hex_chars) for i in range(6)])
+
     @property
     def coordinates(self) -> namedtuple:
         """
         Возвращает именованный кортеж с полями ``x`` и ``y``.
 
-        Вычисляет границы осей х и у исходя из размеров экрана, что задаются
+        Содержит границы осей х и у исходя из размеров экрана, что задаются
         параметрами класса ``CustomScreen.SCREEN_WIDTH`` и ``CustomScreen.SCREEN HEIGHT``.
         К примеру, если экран имеет размер 640х480, то поля будут иметь следующие значения:
             x = (-320, 320),
@@ -102,9 +201,31 @@ class CustomTurtle(TurtleConfig, t.Turtle):
         """
 
         coord = namedtuple('Coordinates', ['x', 'y'])
-        coord.x = (-1 * self.screen_width // 2, self.screen_width // 2)
-        coord.y = (-1 * self.screen_height // 2, self.screen_height // 2)
+        coord.x = self.x_coordinates
+        coord.y = self.y_coordinates
         return coord
+
+    @property
+    def x_coordinates(self) -> tuple:
+        """
+        Возвращает кортеж, с границами экрана по оси ``x``.
+
+        К примеру, если экран имеет ширину 640px, то кортеж будет
+        иметь следующие значения:
+            (-320, 320)
+        """
+        return -1 * self.screen_width // 2, self.screen_width // 2
+
+    @property
+    def y_coordinates(self):
+        """
+        Возвращает кортеж, с границами экрана по оси ``у``.
+
+        К примеру, если экран имеет высоту 480px, то кортеж будет
+        иметь следующие значения:
+            (-240, 240)
+        """
+        return -1 * self.screen_height // 2, self.screen_height // 2
 
     @property
     def screen_height(self):
@@ -122,6 +243,8 @@ class CustomTurtle(TurtleConfig, t.Turtle):
         self.pencolor(self.PEN_COLOR)
         self.fillcolor(self.PEN_FILL_COLOR)
         self.pensize(self.PEN_SIZE)
+        self.speed(self.TURTLE_SPEED)
+        self.hideturtle() if self.HIDE_TURTLE else self.showturtle()
 
         self.window.setup(
             self.SCREEN_WIDTH,

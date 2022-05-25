@@ -1,11 +1,13 @@
-class DefaultConfig:
-    PEN_COLOR = 'red'
-    PEN_FILL_COLOR = 'red'
-    PEN_SIZE = 2
-    SCREEN_WIDTH = 640
-    SCREEN_HEIGHT = 480
-    BACKGROUND_COLOR = 'orange'
-
-
 class CustomConfig:
-    PEN_COLOR = 'blue'
+    BACKGROUND_COLOR = '#3c386e'
+    PEN_COLOR = '#e9e8ed'
+    PEN_FILL_COLOR = '#e9e8ed'
+    TURTLE_SPEED = 10
+    HIDE_TURTLE = False
+    SCREEN_HEIGHT = 480
+    SCREEN_WIDTH = 640
+
+
+class SecondCustomConfig:
+    PEN_COLOR = '#f5a51b'
+    PEN_FILL_COLOR = '#f5a51b'
