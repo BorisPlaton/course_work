@@ -14,10 +14,11 @@ class DefaultConfig:
     BACKGROUND_COLOR = 'orange'
     TURTLE_SPEED = 10
     HIDE_TURTLE = False
+    DELAY = 0
 
     _config_list = [
         'PEN_COLOR', 'PEN_FILL_COLOR', 'PEN_SIZE', 'SCREEN_WIDTH', 'SCREEN_HEIGHT',
-        'BACKGROUND_COLOR', 'TURTLE_SPEED', 'HIDE_TURTLE',
+        'BACKGROUND_COLOR', 'TURTLE_SPEED', 'HIDE_TURTLE', 'DELAY',
     ]
 
 
@@ -62,8 +63,6 @@ class CustomTurtle(TurtleConfig, t.Turtle):
             (right_top_coord[0] + 50, right_top_coord[1])
         )
 
-        self._setup_class()
-
     def _draw_amogus_body(self, start_point: tuple):
         self.move_to(start_point)
         self.begin_fill()
@@ -96,10 +95,6 @@ class CustomTurtle(TurtleConfig, t.Turtle):
 
         right_top_angle: tuple
         left_bottom_angle: tuple
-
-        self.move_to(
-            (int(self.x_coordinates[0] + self.x_coordinates[0] * 0.1), 0)
-        )
 
         self.begin_fill()
         self.down()
@@ -251,3 +246,6 @@ class CustomTurtle(TurtleConfig, t.Turtle):
             self.SCREEN_HEIGHT,
         )
         self.window.bgcolor(self.BACKGROUND_COLOR)
+
+        t.delay(self.DELAY)
+

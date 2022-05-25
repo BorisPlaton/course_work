@@ -3,9 +3,10 @@ class CustomConfig:
     PEN_COLOR = '#e9e8ed'
     PEN_FILL_COLOR = '#e9e8ed'
     TURTLE_SPEED = 10
-    HIDE_TURTLE = False
+    HIDE_TURTLE = True
     SCREEN_HEIGHT = 480
     SCREEN_WIDTH = 640
+    DELAY = 0
 
 
 class SecondCustomConfig:
