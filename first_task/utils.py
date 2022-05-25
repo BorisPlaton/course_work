@@ -151,10 +151,10 @@ class CustomTurtle(TurtleConfig, t.Turtle):
             self.right(-48)
         self.end_fill()
 
-    def draw_background(self, length: int = 25, squares_amount: int = 25):
+    def draw_background(self, length: int = 25, pattern_quantity: int = 25):
         self.down()
         self.pencolor(self.get_random_color())
-        for i in range(squares_amount):
+        for i in range(pattern_quantity):
             length += 10
             self.left(5)
             for _ in range(4):

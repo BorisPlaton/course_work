@@ -40,9 +40,11 @@ cursor = CustomTurtle()
 screen = t.Screen()
 cursor.set_config_from_class(CustomConfig)
 
-for _ in range(5):
+for _ in range(10):
     cursor.move_to(cursor.get_random_coordinates())
-    cursor.draw_background()
+    cursor.draw_background(pattern_quantity=10)
+
+cursor.set_config_from_class(CustomConfig)
 cursor.draw_stars(length=10, stars_amount=10)
 cursor.set_config_from_class(SecondCustomConfig)
 cursor.draw_stars(length=10, stars_amount=15)
